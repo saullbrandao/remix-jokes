@@ -1,5 +1,6 @@
 import {
   ActionFunction,
+  Form,
   json,
   Link,
   LoaderFunction,
@@ -82,7 +83,7 @@ export default function NewJoke() {
   return (
     <div>
       <p>Add your own hilarious joke</p>
-      <form method="post">
+      <Form method="post">
         <div>
           <label>
             Name:{' '}
@@ -131,7 +132,7 @@ export default function NewJoke() {
             Add
           </button>
         </div>
-      </form>
+      </Form>
     </div>
   )
 }

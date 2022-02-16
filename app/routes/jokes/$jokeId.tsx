@@ -1,5 +1,6 @@
 import {
   ActionFunction,
+  Form,
   LoaderFunction,
   MetaFunction,
   redirect,
@@ -86,12 +87,12 @@ export default function JokeRoute() {
       <p>{joke.content}</p>
       <Link to=".">{joke.name} Permalink</Link>
       {isOwner ? (
-        <form method="post">
+        <Form method="post">
           <input type="hidden" name="_method" value="delete" />
           <button type="submit" className="button">
             Delete
           </button>
-        </form>
+        </Form>
       ) : null}
     </div>
   )

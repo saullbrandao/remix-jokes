@@ -3,6 +3,7 @@ import { Outlet, Link } from 'remix'
 
 import { db } from '~/utils/db.server'
 import stylesUrl from '~/styles/jokes.css'
+import { getUser } from '~/utils/session.server'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: stylesUrl }]
@@ -14,23 +15,27 @@ type Joke = {
 }
 
 type LoaderData = {
-  jokeListItems: Joke[]
+  user: Awaited<ReturnType<typeof getUser>>
+  jokeListItems: Array<{ id: string; name: string }>
 }
 
-export const loader: LoaderFunction = async () => {
-  const data: LoaderData = {
-    jokeListItems: await db.joke.findMany({
-      take: 5,
-      select: { id: true, name: true },
-      orderBy: { createdAt: 'desc' },
-    }),
-  }
+export const loader: LoaderFunction = async ({ request }) => {
+  const jokeListItems = await db.joke.findMany({
+    take: 5,
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, name: true },
+  })
+  const user = await getUser(request)
 
+  const data: LoaderData = {
+    jokeListItems,
+    user,
+  }
   return data
 }
 
 export default function JokesRoute() {
-  const { jokeListItems } = useLoaderData<LoaderData>()
+  const { jokeListItems, user } = useLoaderData<LoaderData>()
 
   return (
     <div className="jokes-layout">
@@ -42,6 +47,18 @@ export default function JokesRoute() {
               <span className="logo-medium">J🤪KES</span>
             </Link>
           </h1>
+          {user ? (
+            <div className="user-info">
+              <span>{`Hi ${user.username}`}</span>
+              <form action="/logout" method="post">
+                <button type="submit" className="button">
+                  Logout
+                </button>
+              </form>
+            </div>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
         </div>
       </header>
       <main className="jokes-main">

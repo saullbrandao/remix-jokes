@@ -63,6 +63,10 @@
 .jokes-outlet {
   flex: 1;
 }
+.jokes-rss {
+  display: block;
+  margin: 1rem 0;
+}
 
 .jokes-footer {
   padding-top: 2rem;

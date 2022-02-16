@@ -1,6 +1,7 @@
 import {
   ActionFunction,
   LoaderFunction,
+  MetaFunction,
   redirect,
   useCatch,
   useLoaderData,
@@ -55,6 +56,24 @@ export const action: ActionFunction = async ({ request, params }) => {
     await db.joke.delete({ where: { id: params.jokeId } })
 
     return redirect('/jokes')
+  }
+}
+
+export const meta: MetaFunction = ({
+  data,
+}: {
+  data: LoaderData | undefined
+}) => {
+  if (!data) {
+    return {
+      title: 'No joke',
+      description: 'No joke found',
+    }
+  }
+
+  return {
+    title: `"${data.joke.name}" joke`,
+    description: `Enjoy the "${data.joke.name}" joke and much more`,
   }
 }
 

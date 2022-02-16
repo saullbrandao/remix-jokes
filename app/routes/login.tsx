@@ -1,4 +1,10 @@
-import { ActionFunction, json, LinksFunction, useActionData } from 'remix'
+import {
+  ActionFunction,
+  json,
+  LinksFunction,
+  MetaFunction,
+  useActionData,
+} from 'remix'
 import { Link, useSearchParams } from 'remix'
 import { db } from '~/utils/db.server'
 import { createUserSession, login, register } from '~/utils/session.server'
@@ -108,6 +114,13 @@ export const action: ActionFunction = async ({ request }) => {
         formError: `Login type invalid`,
       })
     }
+  }
+}
+
+export const meta: MetaFunction = () => {
+  return {
+    title: 'Remix Jokes | Login',
+    description: 'Login to submit your own jokes to Remix Jokes!',
   }
 }
 
